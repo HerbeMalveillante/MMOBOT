@@ -41,9 +41,13 @@ To work, the program needs a file named `config.txt` in the root folder containi
 ## Commands
 
 `help` allow you to see the commands and cog list
+
 `ping` pings the bot
+
 `info` displays infos about the bot
+
 `profile` displays your profile or the profile of an user if specified
+
 
 Find the complete commands list with the `help` command !
 
