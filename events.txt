@@ -1,0 +1,59 @@
+INVENTAIRE
+
+Gold = argent
+Exp = experience et niveau
+Energie = actions qu'on peut faire
+Diamants = Monnaie premium du jeu
+Points de compétence
+
+EQUIPEMENT
+Arme -> puissance d'attaque
+Armure -> défense
+Sac à dos -> quantité d'énergie transportable
+
+STATISTIQUE
+Attaque -> puissance d'attaque
+Défense -> défense
+Endurance -> vitesse de régénération de l'énergie
+
+OBJETS
+Bois
+Tissu
+Fer
+Pierre
+Orbe
+Emeraude
+Bouteille d'Huile
+Obsidienne
+Herbes
+Antimatière
+
+ID 0 0 10 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0
+
+!step !explore !play
+
+10 energie -> remonte petit à petit
+
+
+!step
+
+Vous vous cognez contre un rocher, mais par chance vous trouvez une pièce d'or sous celui ci 
++1 pièce d'or +1 experience
+
+Vous rencontrez une sorcière, elle vous fait manger un champignon qui vous redonne de la vie
++10 vie +10 experience
+
+Vous vous perdez dans les bois, vous perdez de l'énergie à force de crier à l'aide
+-5 energie
+
+devlog NOTE #2150 : aujourd'hui je suis sorti acheter un café et j'ai vu un chier avec des dreadlocks. C'était marrant.
+
+modules : 
+->  construire une ville, tu es le maire et les habitants te versent de l'or tous les jours
+	améliorer les batiments coutent de l'argent
+	basé sur des lieux réels, customiser la ville
+->  combats
+	soit joueur contre joueur
+	soit pve (boss)
+	soit déclenché par un step
+->  miner

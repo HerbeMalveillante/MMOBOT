@@ -1,0 +1,68 @@
+Bot discord (encore un ?)
+
+Inspiré par SimpleMMO
+
+
+trois commandes pour le moment : 
+
+
+!step -> fais un pas dans l'aventure -> évènement aléatoire à partir d'un fichier csv
+									 -> donne de l'xp et des trucs au pif
+									 -> doit être construit de façon à ce que je puisse rajouter des combats ou d'autres activités
+
+!profile -> montre les stats et le profil du joueur -> database mysql
+													-> je dois faire en sorte de pouvoir rajouter des stats au fur et à mesure sans soucis avec la database
+													-> les niveaux doivent être calculés automatiquement
+													-> chaque niveau supplémentaire donne deux points de compétences au joueur
+													-> plein d'objets différents dans l'inventaire (une dizaine ?)
+													-> des stats à renforcer avec les points de compétence mais ça viendra après
+													-> monnaie premium
+
+et la loop qui fait remonter l'énergie du joueur
+
+
+je considère que le bot est jouable une fois que tout ça est codé
+après y'a plus qu'à broder là dessus lol
+
+Le joueur possède quatre stats :
+
+Attaque
+Défense
+Dexterité
+Endurance
+
+ces quatres stats peuvent être augmentées par : 
+-l'équipement
+-les points de compétences -> donnés au joueur quand il gagne un niveau, il peut les attribuer à sa guise
+-le niveau (calculé à partir de l'xp)
+-d'autres trucs à l'avenir on verra
+
+il faut calculer l'énergie qui se régénère toute seule et l'énergie max du joueur, calculée à partir de l'endurance.
+formule pour calculer l'xp à partir du niveau : 
+x = (n/a)**b
+x being the xp number
+n being the level number
+a and b being constants
+
+if a is great, you'll need a lot of xp to gain levels
+if b is great, the number of xp to the next level will increase quicker
+
+we need a medium a and a medium b
+
+Let's reverse the formula to express n with x
+
+let's try with a = 0.1 and b = 1.3
+calculate the xp needed for a level :
+-> f(x) = (x/0.1)^1.3 with w being the level
+calculate the level corresponding to an amount of xp :
+-> g(x) = 0.1x^10/13
+
+each time an amount of xp is given to a player :
+-> we calculate the level of the player and round to the floor
+-> we add this amount to his total amount of xp
+-> we calculate the level for this amount and round to the floor
+-> if the level has changed, level up !
+   -> we give x points with the given formula : x= 2*(current level - old level)
+-> in all cases, we display the current xp remaining for his next level by doing
+   [total xp - xp for current level] / [xp for next level - xp for current level]
+
