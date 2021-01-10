@@ -38,6 +38,8 @@ To work, the program needs a file named `config.txt` in the root folder containi
 }
 ```
 
+You should also create an empty `stats.csv` file.
+
 ## Commands
 
 `help` allow you to see the commands and cog list
