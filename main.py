@@ -40,7 +40,7 @@ if __name__ == '__main__':
 		log(f"successfully loaded extension {ext}")
 	bot.load_extension("jishaku")
 	log("successfully loaded jishaku")
-	
+
 
 
 @bot.event  # when the bot is connected and ready to run commands.
@@ -83,14 +83,14 @@ async def on_command_error(ctx, error):
 @bot.command(name="ping", aliases=["pong"], description = "A simple command that pings the bot to check if he is awake.")
 async def ping(ctx):
 	"""A simple command that pings the bot to check if he is awake."""
-	
+
 	start = time.perf_counter()
-	
+
 	embed = discord.Embed(title="PONG :ping_pong: ", description="I'm online ! :signal_strength:", colour=config.colour, timestamp=datetime.datetime.utcnow())
 	embed.set_thumbnail(url=bot.user.avatar_url)
 	embed.set_footer(text=bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
 	message = await ctx.send(embed=embed)
-	
+
 	end = time.perf_counter()
 	duration = (end-start)*1000
 	embed.add_field(name="Latency", value = "{:.2f}ms".format(duration), inline = False)
@@ -104,7 +104,7 @@ async def say(ctx, *content):
 		message = await ctx.send(' '.join(content))
 		await ctx.message.delete()
 		log(f"{ctx.author} made the bot say '{' '.join(content)}'")
-	else : 
+	else :
 		await ctx.send("I'm sorry, this command is for admins only.")
 
 @tasks.loop(seconds=1200.0)

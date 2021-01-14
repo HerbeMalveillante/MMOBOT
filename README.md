@@ -9,6 +9,7 @@
 MMOBOT is a powerful discord bot providing an immersive command-line based MMORPG experience in a group chat or server. 
 
 To invite the bot in your server, follow [this link](https://discord.com/oauth2/authorize?client_id=793928798298177537&scope=bot&permissions=379969) (minimal permissions by default)
+To join the official bot server, follow [this link](https://discord.gg/vRA4gdraaC)
 
 
 ## Installation and usage
