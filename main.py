@@ -10,6 +10,7 @@ from configcreator import Config
 import sys
 import traceback
 import csv
+import time
 
 intents = discord.Intents.default()
 intents.members = True
@@ -82,11 +83,29 @@ async def on_command_error(ctx, error):
 @bot.command(name="ping", aliases=["pong"], description = "A simple command that pings the bot to check if he is awake.")
 async def ping(ctx):
 	"""A simple command that pings the bot to check if he is awake."""
+	
+	start = time.perf_counter()
+	
 	embed = discord.Embed(title="PONG :ping_pong: ", description="I'm online ! :signal_strength:", colour=config.colour, timestamp=datetime.datetime.utcnow())
 	embed.set_thumbnail(url=bot.user.avatar_url)
 	embed.set_footer(text=bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
-	await ctx.send(embed=embed)
+	message = await ctx.send(embed=embed)
+	
+	end = time.perf_counter()
+	duration = (end-start)*1000
+	embed.add_field(name="Latency", value = "{:.2f}ms".format(duration), inline = False)
+	await message.edit(embed=embed)
 	log(f"{ctx.author} pinged the bot.")
+
+
+@bot.command(name="say", aliases=['tell', 'repeat'], description = '[ADMIN] Make the bot say something')
+async def say(ctx, *content):
+	if ctx.author.id in config.admins :
+		message = await ctx.send(' '.join(content))
+		await ctx.message.delete()
+		log(f"{ctx.author} made the bot say '{' '.join(content)}'")
+	else : 
+		await ctx.send("I'm sorry, this command is for admins only.")
 
 @tasks.loop(seconds=1200.0)
 async def activity():
