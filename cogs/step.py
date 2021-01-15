@@ -29,7 +29,7 @@ class StepCog(commands.Cog):
 		self.bot = bot
 		
 
-	@commands.cooldown(1, 5, BucketType.member) 
+	#@commands.cooldown(1, 5, BucketType.member) 
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
 		step = random.choice(stepList)
