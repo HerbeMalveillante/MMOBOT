@@ -29,10 +29,11 @@ class StepCog(commands.Cog):
 		self.bot = bot
 		
 
-	#@commands.cooldown(1, 5, BucketType.member) 
+	@commands.cooldown(1, 5, BucketType.member) 
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
 		step = random.choice(stepList)
+		print(f"{ctx.author} triggered event {step}.")
 
 		rewards = [('Gold', random.randint(1,20)), ('Exp', random.randint(1,20))]
 		
@@ -51,6 +52,8 @@ class StepCog(commands.Cog):
 	async def step_error(self, ctx, error):
 		if isinstance(error, commands.CommandOnCooldown):
 			await ctx.send(error)
+		else : 
+			log(error)
 
 
 
