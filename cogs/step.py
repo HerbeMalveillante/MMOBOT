@@ -33,7 +33,7 @@ class StepCog(commands.Cog):
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
 		step = random.choice(stepList)
-		print(f"{ctx.author} triggered event {step}.")
+		print(f"{ctx.author} triggered event {step[0]}.")
 
 		rewards = [('Gold', random.randint(1,20)), ('Exp', random.randint(1,20))]
 		
