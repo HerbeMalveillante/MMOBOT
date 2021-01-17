@@ -75,10 +75,8 @@ class InfoCog(commands.Cog):
 			for row in csv_reader:
 				usercount.append(int(row[1]))
 				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
-	
-			print("Finished loading csv file.")
 		
-		plt.figure(figsize=(9,9))
+		plt.figure(figsize=(18,9))
 		plt.xlabel('UTC time')
 		plt.xticks(rotation=20)
 		plt.ylabel('users')
@@ -92,6 +90,8 @@ class InfoCog(commands.Cog):
 		buf.seek(0)
 		
 		await ctx.send(file=discord.File(buf, "usercount.png"))
+		
+		log(f"{ctx.author} asked for the user infos")
 	
 
 
