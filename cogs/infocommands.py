@@ -77,11 +77,14 @@ class InfoCog(commands.Cog):
 				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
 	
 			print("Finished loading csv file.")
-
-		plt.xlabel('time')
+		
+		plt.figure(figsize=(9,9))
+		plt.xlabel('UTC time')
 		plt.xticks(rotation=20)
 		plt.ylabel('users')
-		plt.title('mmobot users over time')
+		plt.title('Data updated every 10m')
+		plt.suptitle('MMOBOT users over time')
+		#plt.title("i'm gay")
 		plt.plot(time, usercount)
 		#plt.show()
 		buf = BytesIO()
