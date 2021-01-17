@@ -82,6 +82,7 @@ class InfoCog(commands.Cog):
 		plt.ylabel('users')
 		plt.title('Data updated every 10m')
 		plt.suptitle('MMOBOT users over time')
+		plt.grid(b=True)
 		#plt.title("i'm gay")
 		plt.plot(time, usercount)
 		#plt.show()
