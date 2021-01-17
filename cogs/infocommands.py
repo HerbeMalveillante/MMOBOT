@@ -9,6 +9,10 @@ import psutil
 import os
 import platform
 import sys
+import matplotlib.pyplot as plt
+import csv
+import datetime
+from io import BytesIO
 
 config = Config()
 
@@ -60,11 +64,31 @@ class InfoCog(commands.Cog):
 		await ctx.send(helptext)
 		helptext+= "WARNING : this help command is temporary."
 	
-	@commands.command(name="users", description="Prints to the console all the users the bot can see")
+	@commands.command(name="users", description="Sends a cool graph showing the number of users")
 	async def users(self, ctx):
-		await ctx.send("Check your console : the user list has been printed")
-		for i in self.bot.users:
-			print(i)
+		usercount = []
+		time = []
+
+		with open('stats.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+	
+			for row in csv_reader:
+				usercount.append(int(row[1]))
+				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
+	
+			print("Finished loading csv file.")
+
+		plt.xlabel('time')
+		plt.xticks(rotation=20)
+		plt.ylabel('users')
+		plt.title('mmobot users over time')
+		plt.plot(time, usercount)
+		#plt.show()
+		buf = BytesIO()
+		plt.savefig(buf,format="png")
+		buf.seek(0)
+		
+		await ctx.send(file=discord.File(buf, "usercount.png"))
 	
 
 
