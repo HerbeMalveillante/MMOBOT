@@ -90,10 +90,13 @@ class InfoCog(commands.Cog):
 		plt.savefig(buf,format="png")
 		buf.seek(0)
 		
-		await ctx.send(file=discord.File(buf, "usercount.png"))
+		await ctx.send("<:stonks:800794117389942814>",file=discord.File(buf, "usercount.png"))
 		
 		log(f"{ctx.author} asked for the user infos")
 	
+	@commands.command(name="contribute", aliases = ['contribution', "newevent", "form", "googleform"], description = "Shows the google form in which you can contribute to the bot.")
+	async def contribute(self, ctx):
+		await ctx.send(f"You can contribute to the bot very easily ! If you want to add a new random event, monsters, items, commands or gameplay mechanics to MMOBOT, just follow this link and fill the form : https://forms.gle/bKdt8XUdEqmF6Bru5")	
 
 
 

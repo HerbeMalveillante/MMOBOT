@@ -8,6 +8,7 @@ import datetime
 import time
 import sys
 import traceback
+import formulas
 
 config = Config()
 
@@ -29,8 +30,9 @@ class DatabaseCog(commands.Cog):
 			embed = discord.Embed(title=f"PROFILE OF {member}", description="", colour=config.colour, timestamp=datetime.datetime.utcnow())
 			embed.set_thumbnail(url=member.avatar_url)
 			embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
+			level = formulas.levelFromXp(stats[1])
 			statstring = f"""
-			:star: Exp : `{stats[1]}`
+			:star: Level : `{level} ({stats[1]}/{formulas.xpFromLevel(level+1)})`
 			<:coins:789965630434181120> Gold : `{stats[2]}`
 			:zap: Energy : `{stats[3]}`/`{stats[10]*10}`
 			<:diamond:796663370002071582> Diamonds : `{stats[4]}`
@@ -69,6 +71,9 @@ class DatabaseCog(commands.Cog):
 		if isinstance(error, commands.BadArgument):
 			await ctx.send("Sorry, we could not find this member")
 			log(f"{ctx.author} tried to display the profile of a member but it could not be found.")
+		else : 
+			print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+			traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 	
 	@commands.command(name="setstat", aliases = ["ss"], description = "[ADMIN]")
 	async def setstat(self, ctx, member : discord.Member=None, stat = None, value = None):
