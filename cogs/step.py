@@ -9,6 +9,7 @@ import datetime
 import random
 import csv
 import os
+import formulas
 
 
 config = Config()
@@ -41,7 +42,7 @@ class StepCog(commands.Cog):
 			step = random.choice(stepList)
 			print(f"{ctx.author} triggered event {step[0]}.")
 			
-			rewards = [('Gold', random.randint(1,20)), ('Exp', random.randint(1,20))]
+			rewards = [('Gold', formulas.automaticGold(database.get_userdata(ctx.author.id, "Exp")[0])), ('Exp', random.randint(1,20))]
 			if step[2] != "None" : 
 				rewards.append((step[2], random.randint(1,20)))
 			embed = discord.Embed(title=f"You did one more step on your adventure !", description = "", colour = config.colour, timestamp=datetime.datetime.utcnow())
