@@ -51,9 +51,13 @@ class StepCog(commands.Cog):
 			embed.add_field(name="Event label", value = step[1], inline = False)
 			try :
 				strRewards = "\n".join([f"{emojis[r[0]]} {r[0]} : `{r[1]}`" for r in rewards])
+				
 			except :
 				log("IMPORTANT : STEP ERROR HAS OCCURED : BAD FORMATTING.")
 				log(rewards)
+				
+			for reward in rewards : 
+				database.increase_userdata(ctx.author.id, reward[0], reward[1])
 
 			embed.add_field(name="Rewards", value = strRewards, inline = False)
 			await ctx.send(embed=embed)

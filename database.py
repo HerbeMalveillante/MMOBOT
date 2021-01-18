@@ -39,10 +39,10 @@ def print_whole_database():
 	for i in _get_whole_database():
 		print(str(i))
 
-def modify_userdata(user_id, stat, value, print=True):
+def modify_userdata(user_id, stat, value, printOutput=True):
 	curseur.execute(f"UPDATE userdata SET {stat} = {value} WHERE id = {user_id}")
 	connexion.commit()
-	if print:
+	if printOutput:
 		log(f"[DATABASE] modified userdata for user {user_id} : {stat} got a value of {value}")
 
 def increment_energy(print=True):
@@ -54,22 +54,26 @@ def does_account_exists(user_id):
 	result = curseur.fetchone()
 	return not result == None
 
-def delete_user_account(user_id):
+def delete_user_account(user_id, printOutput = True):
 	if does_account_exists(user_id):
 		curseur.execute(f"DELETE FROM userdata WHERE id = {user_id}")
 		connexion.commit()
-		log(f"[DATABASE] deleted account number {user_id}")
+		if printOutput:
+			log(f"[DATABASE] deleted account number {user_id}")
 	else : 
-		log(f"[DATABASE] Could not delete : user {user_id} not found in the database")
+		if printOutput:
+			log(f"[DATABASE] Could not delete : user {user_id} not found in the database")
 
 
-def create_account(user_id):
+def create_account(user_id, printOutput=True):
 	if not does_account_exists(user_id):
 		curseur.execute("INSERT INTO userdata VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (user_id, 0, 0, 10, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-		log(f"[DATABASE] Created account for user {user_id}")
 		connexion.commit()
+		if printOutput :
+			log(f"[DATABASE] Created account for user {user_id}")
 	else :
-		log(f"[DATABASE] The user {user_id} already is in the database")
+		if printOutput :
+			log(f"[DATABASE] The user {user_id} already is in the database")
 
 def get_all_ids():
 	curseur.execute("SELECT id FROM userdata")
@@ -81,11 +85,17 @@ def get_player_number():
 	number = curseur.fetchone()[0]
 	return number
 
-def increase_userdata(user_id, stat, value, print=True):
+def increase_userdata(user_id, stat, value, printOutput=True):
 	curseur.execute(f"UPDATE userdata SET {stat} = {stat}+{value} WHERE id = {user_id}")
 	connexion.commit()
-	if print:
+	if printOutput:
 		log(f"[DATABASE] increased userdata for user {user_id} : {stat} increased by {value}")
+		
+def delete_userdata(user_id,printOutput=True):
+	curseur.execute(f"DELETE FROM userdata WHERE id = {user_id}")
+	connexion.commit()
+	if printOutput : 
+		log(f"[DATABASE] deleted account for user {user_id}.")
 
 
 log("[DATABASE] database module loaded")

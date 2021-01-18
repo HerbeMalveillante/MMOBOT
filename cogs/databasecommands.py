@@ -6,6 +6,8 @@ import database
 from configcreator import Config
 import datetime
 import time
+import sys
+import traceback
 
 config = Config()
 
@@ -87,9 +89,8 @@ class DatabaseCog(commands.Cog):
 	@commands.command(name="addstat", aliases=['as', 'add'], description = "[ADMIN]")
 	async def addstat(self, ctx, member: discord.Member=None, stat = None, value = None):
 		if ctx.author.id in config.admins : 
-			database.increase_userdata(member.id, stat, int(value))
 			try : 
-				
+				database.increase_userdata(member.id, stat, int(value))
 				await ctx.send(f"Increased stat {stat} for user {member} by {value}")
 			except : 
 				await ctx.send(f"Oops : Something went wrong. Please check your syntax : {config.prefix}addstat [member] [stat] [value]")
@@ -100,6 +101,26 @@ class DatabaseCog(commands.Cog):
 	async def addstat_error(self, ctx, error):
 		if isinstance(error, commands.MemberNotFound):
 			await ctx.send(f"User not found ! Check command usage : {config.prefix}addstat [user] [stat] [value]")
+			
+	@commands.command(name="reset", aliases=['delete', 'restart'], description = "[ADMIN] resets another user's stats.")
+	async def reset(self, ctx, member: discord.Member=None):
+		if ctx.author.id in config.admins: 
+		
+			try :
+				database.delete_userdata(member.id)
+				await ctx.send(f"Resetted account for user {member}")
+			except AttributeError : 
+				await ctx.send(f"Oops : Something went wrong. Please check your syntax : {config.prefix}reset [member]")
+		else : 
+			await ctx.send(f"Sorry, this command is only for admins.")
+	
+	@reset.error
+	async def reset_error(self, ctx, error):
+		if isinstance(error, commands.MemberNotFound):
+			await ctx.send(f"User not found ! Check command usage : {config.prefix}reset [member]")
+		else : 
+			print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+			traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 
 
@@ -123,7 +144,7 @@ async def discord_create_account(member,ctx):
 				return False
 		else :
 			database.create_account(member.id)
-			await member.send("Hello ! We received a mail to prevent us that you created an account on MMOBOT : congratulations ! Join the official server here : [the bot does not have an official server for now]")
+			await member.send("Hello ! We received a mail to prevent us that you created an account on MMOBOT : congratulations ! Join the official server here : https://discord.gg/vRA4gdraaC")
 			log(f"{ctx.author} just created an account !")
 
 
