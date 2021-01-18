@@ -1,4 +1,5 @@
 __pycache__/
+*.db
 config.txt
 stats.csv
 database.db
