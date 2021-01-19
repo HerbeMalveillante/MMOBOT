@@ -10,6 +10,7 @@ import random
 import csv
 import os
 import formulas
+from cogs.databasecommands import discord_create_account
 
 
 config = Config()
@@ -33,38 +34,42 @@ class StepCog(commands.Cog):
 	@commands.cooldown(1, 5, BucketType.member) 
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
-		playerEnergy = database.get_userdata(ctx.author.id, "Energy")[0]
-		
-		if playerEnergy > 0 :
-		
-			database.increase_userdata(ctx.author.id, "Energy", -1)
+	
+		if await discord_create_account(ctx.author, ctx):
+	
+	
+			playerEnergy = database.get_userdata(ctx.author.id, "Energy")[0]
 			
-			step = random.choice(stepList)
-			print(f"{ctx.author} triggered event {step[0]}.")
+			if playerEnergy > 0 :
 			
-			rewards = [('Gold', formulas.automaticGold(database.get_userdata(ctx.author.id, "Exp")[0])), ('Exp', random.randint(1,20))]
-			if step[2] != "None" : 
-				rewards.append((step[2], random.randint(1,20)))
-			embed = discord.Embed(title=f"You did one more step on your adventure !", description = "", colour = config.colour, timestamp=datetime.datetime.utcnow())
-			embed.set_thumbnail(url=self.bot.user.avatar_url)
-			embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
-			
-			embed.add_field(name="Event label", value = step[1], inline = False)
-			try :
-				strRewards = "\n".join([f"{emojis[r[0]]} {r[0]} : `{r[1]}`" for r in rewards])
+				database.increase_userdata(ctx.author.id, "Energy", -1)
 				
-			except :
-				log("IMPORTANT : STEP ERROR HAS OCCURED : BAD FORMATTING.")
-				log(rewards)
+				step = random.choice(stepList)
+				print(f"{ctx.author} triggered event {step[0]}.")
 				
-			for reward in rewards : 
-				database.increase_userdata(ctx.author.id, reward[0], reward[1])
+				rewards = [('Gold', formulas.automaticGold(database.get_userdata(ctx.author.id, "Exp")[0])), ('Exp', random.randint(1,20))]
+				if step[2] != "None" : 
+					rewards.append((step[2], random.randint(1,20)))
+				embed = discord.Embed(title=f"You did one more step on your adventure !", description = "", colour = config.colour, timestamp=datetime.datetime.utcnow())
+				embed.set_thumbnail(url=self.bot.user.avatar_url)
+				embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
+				
+				embed.add_field(name="Event label", value = step[1], inline = False)
+				try :
+					strRewards = "\n".join([f"{emojis[r[0]]} {r[0]} : `{r[1]}`" for r in rewards])
+					
+				except :
+					log("IMPORTANT : STEP ERROR HAS OCCURED : BAD FORMATTING.")
+					log(rewards)
+					
+				for reward in rewards : 
+					database.increase_userdata(ctx.author.id, reward[0], reward[1])
 
-			embed.add_field(name="Rewards", value = strRewards, inline = False)
-			await ctx.send(embed=embed)
-		
-		else : 
-			await ctx.send(f"I'm sorry {ctx.author}, but you can't explore anymore as you're out of energy. Take some rest and try again a bit later !")
+				embed.add_field(name="Rewards", value = strRewards, inline = False)
+				await ctx.send(embed=embed)
+			
+			else : 
+				await ctx.send(f"I'm sorry {ctx.author}, but you can't explore anymore as you're out of energy. Take some rest and try again a bit later !")
 
 	@step.error
 	async def step_error(self, ctx, error):
