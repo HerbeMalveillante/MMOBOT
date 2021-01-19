@@ -41,6 +41,7 @@ class StepCog(commands.Cog):
 	
 	
 			playerEnergy = database.get_userdata(ctx.author.id, "Energy")[0]
+			playerXp = database.get_userdata(ctx.author.id, "Exp")[0]
 			
 			if playerEnergy > 0 :
 			
@@ -48,10 +49,10 @@ class StepCog(commands.Cog):
 				
 				step = random.choice(stepList)
 				print(f"{ctx.author} triggered event {step[0]}.")
-				
-				rewards = [('Gold', formulas.automaticGold(database.get_userdata(ctx.author.id, "Exp")[0])), ('Exp', random.randint(1,20))]
+				expReward = random.randint(1,20)
+				rewards = [('Gold', formulas.automaticGold(playerXp)), ('Exp', expReward)]
 				if step[2] != "None" : 
-					rewards.append((step[2], random.randint(1,20)))
+					rewards.append((step[2], formulas.automaticLoot(playerXp, step[2])))
 				embed = discord.Embed(title=f"You did one more step on your adventure !", description = "", colour = config.colour, timestamp=datetime.datetime.utcnow())
 				embed.set_thumbnail(url=self.bot.user.avatar_url)
 				embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
@@ -69,9 +70,13 @@ class StepCog(commands.Cog):
 
 				embed.add_field(name="Rewards", value = strRewards, inline = False)
 				await ctx.send(embed=embed)
+				
+				for reward in rewards : 
+					if reward[0] == 'Exp':
+						await check_for_level(ctx.author, ctx, reward[1])
 			
 			else : 
-				await ctx.send(f"I'm sorry {ctx.author}, but you can't explore anymore as you're out of energy. Take some rest and try again a bit later !")
+				await ctx.send(f"You try to muster all your willpower to move forward, but your body is telling you that it no longer has the strength to continue. You need some rest right now, but you will be able to explore again as soon as your energy is restored.")
 
 	@step.error
 	async def step_error(self, ctx, error):
@@ -80,7 +85,11 @@ class StepCog(commands.Cog):
 		else : 
 			log(error)
 
-
+async def check_for_level(member, ctx, amount):
+	"""This should be checked AFTER adding the <amount> amount of xp to the player"""
+	currentXP = database.get_userdata(member.id, 'Exp')[0]
+	if formulas.levelFromXp(currentXP) > formulas.levelFromXp(currentXP-amount):
+		await ctx.send("<:arrow:801026149785796638> :star: You just gained a level ! Congratulations ! In a soon update, you will earn competence points that will allow you to upgrade your Attack, Defense and Stamina !")
 
 def setup(bot):
 	bot.add_cog(StepCog(bot))

@@ -12,7 +12,6 @@ import traceback
 import csv
 import time
 import os
-import git
 
 intents = discord.Intents.default()
 intents.members = True

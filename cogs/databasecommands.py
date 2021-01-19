@@ -154,9 +154,10 @@ async def discord_create_account(member,ctx):
 			await member.send("Hello ! We received a mail to prevent us that you created an account on MMOBOT : congratulations ! Join the official server here : https://discord.gg/vRA4gdraaC")
 			log(f"{ctx.author} just created an account !")
 
-
-
 	return True
+
+
+	
 
 
 def setup(bot):

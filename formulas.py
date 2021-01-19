@@ -19,6 +19,16 @@ def automaticGold(xp):
 	gold = random.randint(int(low) if low >= 1 else 1 , int(high) if high >= 2 else 2)
 	return gold
 	
+	
+def automaticLoot(xp, item):
+
+	if item == 'Antimatter':
+		return 1
+	else : 
+		return random.randint(1,20)
+
+
+
 if __name__ == "__main__":
 
 	print("Level = 1000")
