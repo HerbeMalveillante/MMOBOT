@@ -1,3 +1,5 @@
+# commands that display infos about the bot.
+
 import discord
 from discord.ext import commands
 import asyncio

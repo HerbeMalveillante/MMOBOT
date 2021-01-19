@@ -1,3 +1,5 @@
+# adds commands that interact with the database (see data, add data, etc)
+
 import discord
 from discord.ext import commands, tasks
 import asyncio

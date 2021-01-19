@@ -1,3 +1,5 @@
+# set of functions used to manage the sqlite3 database
+
 import sqlite3
 import json
 from log import log

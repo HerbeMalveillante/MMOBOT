@@ -1,3 +1,5 @@
+# this is completely useless for now.
+
 import discord
 from discord.ext import commands
 import asyncio

@@ -1,3 +1,5 @@
+# This module contains all the functions that calculates the drop rates based on user's stats.
+
 import math
 import random
 

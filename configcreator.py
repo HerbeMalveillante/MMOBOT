@@ -1,3 +1,5 @@
+# creates a config object containing all the configurable variables of the bot.
+
 import json
 import datetime
 

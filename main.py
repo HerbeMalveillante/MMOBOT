@@ -11,6 +11,8 @@ import sys
 import traceback
 import csv
 import time
+import os
+import git
 
 intents = discord.Intents.default()
 intents.members = True
@@ -106,6 +108,7 @@ async def say(ctx, *content):
 		log(f"{ctx.author} made the bot say '{' '.join(content)}'")
 	else : 
 		await ctx.send("I'm sorry, this command is for admins only.")
+
 
 @tasks.loop(seconds=1200.0)
 async def activity():
