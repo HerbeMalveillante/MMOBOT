@@ -89,6 +89,7 @@ async def check_for_level(member, ctx, amount):
 	"""This should be checked AFTER adding the <amount> amount of xp to the player"""
 	currentXP = database.get_userdata(member.id, 'Exp')[0]
 	if formulas.levelFromXp(currentXP) > formulas.levelFromXp(currentXP-amount):
+	
 		await ctx.send("<:arrow:801026149785796638> :star: You just gained a level ! Congratulations ! In a soon update, you will earn competence points that will allow you to upgrade your Attack, Defense and Stamina !")
 
 def setup(bot):
