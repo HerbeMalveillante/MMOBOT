@@ -11,6 +11,7 @@ import sys
 import traceback
 import csv
 import time
+import os
 
 intents = discord.Intents.default()
 intents.members = True

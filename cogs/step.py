@@ -12,7 +12,8 @@ import random
 import csv
 import os
 import formulas
-from cogs.databasecommands import discord_create_account
+import sys
+from cogs import databasecommands
 
 
 config = Config()
@@ -37,7 +38,7 @@ class StepCog(commands.Cog):
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
 	
-		if await discord_create_account(ctx.author, ctx):
+		if await databasecommands.discord_create_account(ctx.author, ctx):
 	
 	
 			playerEnergy = database.get_userdata(ctx.author.id, "Energy")[0]
@@ -63,7 +64,7 @@ class StepCog(commands.Cog):
 					
 				except :
 					log("IMPORTANT : STEP ERROR HAS OCCURED : BAD FORMATTING.")
-					log(rewards)
+					log(str(rewards))
 					
 				for reward in rewards : 
 					database.increase_userdata(ctx.author.id, reward[0], reward[1])
@@ -89,8 +90,9 @@ async def check_for_level(member, ctx, amount):
 	"""This should be checked AFTER adding the <amount> amount of xp to the player"""
 	currentXP = database.get_userdata(member.id, 'Exp')[0]
 	if formulas.levelFromXp(currentXP) > formulas.levelFromXp(currentXP-amount):
+		levelAmount = formulas.levelFromXp(currentXP) - formulas.levelFromXp(currentXP-amount)
 	
-		await ctx.send("<:arrow:801026149785796638> :star: You just gained a level ! Congratulations ! In a soon update, you will earn competence points that will allow you to upgrade your Attack, Defense and Stamina !")
+		await ctx.send(f"<:arrow:801026149785796638> :star: You just gained {'a' if levelAmount < 2 else levelAmount} level{'s' if levelAmount > 1 else ''} ! Congratulations ! In a soon update, you will earn competence points that will allow you to upgrade your Attack, Defense and Stamina !")
 
 def setup(bot):
 	bot.add_cog(StepCog(bot))

@@ -11,6 +11,7 @@ import time
 import sys
 import traceback
 import formulas
+from cogs import step
 
 config = Config()
 
@@ -83,8 +84,12 @@ class DatabaseCog(commands.Cog):
 			try:
 				database.modify_userdata(member.id, stat, int(value))
 				await ctx.send(f"Changed stat {stat} for user {member} to value {value}")
+				if stat == "Exp":
+					await step.check_for_level(member, ctx, int(value))
+				
 			except : 
 				await ctx.send(f"Oops : Something went wrong. Please check your syntax : {config.prefix}setstat [member] [stat] [value]")
+			
 		else : 
 			await ctx.send(f"Sorry, this command is only for admins.")
 
@@ -92,6 +97,9 @@ class DatabaseCog(commands.Cog):
 	async def setstat_error(self, ctx, error):
 		if isinstance(error, commands.MemberNotFound):
 			await ctx.send(f"User not found ! Check command usage : {config.prefix}setstat [user] [stat] [value]")
+		else : 
+			print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+			traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 	@commands.command(name="addstat", aliases=['as', 'add'], description = "[ADMIN]")
 	async def addstat(self, ctx, member: discord.Member=None, stat = None, value = None):
@@ -99,8 +107,12 @@ class DatabaseCog(commands.Cog):
 			try : 
 				database.increase_userdata(member.id, stat, int(value))
 				await ctx.send(f"Increased stat {stat} for user {member} by {value}")
+				if stat == "Exp":
+					await step.check_for_level(member, ctx, int(value))
+				
 			except : 
 				await ctx.send(f"Oops : Something went wrong. Please check your syntax : {config.prefix}addstat [member] [stat] [value]")
+			
 		else : 
 			await ctx.send(f"Sorry, this command is only for admins.")
 
@@ -108,6 +120,9 @@ class DatabaseCog(commands.Cog):
 	async def addstat_error(self, ctx, error):
 		if isinstance(error, commands.MemberNotFound):
 			await ctx.send(f"User not found ! Check command usage : {config.prefix}addstat [user] [stat] [value]")
+		else : 
+			print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
+			traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 			
 	@commands.command(name="reset", aliases=['delete', 'restart'], description = "[ADMIN] resets another user's stats.")
 	async def reset(self, ctx, member: discord.Member=None):
