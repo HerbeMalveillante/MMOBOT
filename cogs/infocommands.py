@@ -77,6 +77,9 @@ class InfoCog(commands.Cog):
 			for row in csv_reader:
 				usercount.append(int(row[1]))
 				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
+				
+		await ctx.send(len(usercount))
+		await ctx.send(len(time))
 		
 		plt.figure(figsize=(18,9))
 		plt.xlabel('UTC time')
