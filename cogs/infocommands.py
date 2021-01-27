@@ -56,17 +56,38 @@ class InfoCog(commands.Cog):
 	@commands.command(name="help", description="Returns all commands available")
 	async def help(self,ctx):
 		log(f"{ctx.author} asked for help about the bot")
-		helptext = "Commands list :```"
-		for command in self.bot.commands:
-			helptext+=f"{command} : {command.description}\n"
-		helptext+="```"
-		helptext+="Cogs list :```\n"
-		helptext+= "\n".join([cog for cog in self.bot.cogs])
-		helptext+="```"
-		await ctx.send(helptext)
-		helptext+= "WARNING : this help command is temporary."
+		#helptext = "Commands list :```"
+		#for command in self.bot.commands:
+		#	helptext+=f"{command} : {command.description}\n"
+		#helptext+="```"
+		#helptext+="Cogs list :```\n"
+		#helptext+= "\n".join([cog for cog in self.bot.cogs])
+		#helptext+="```"
+		#await ctx.send(helptext)
+		#helptext+= "WARNING : this help command is temporary."
+		
+		embed = discord.Embed(title=f"{self.bot.user.name} COMMAND LIST :", description="Warning : this help command is temporary and will be replaced soon.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+		embed.set_thumbnail(url=self.bot.user.avatar_url)
+		embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
+		
+		
+		embed.add_field(name="Game commands : ", value = f"""
+		`{config.prefix}profile [user]` : displays the profile of a user, you by default.
+		`{config.prefix}step` : make a step in the MMOBOT adventure ! Consumes energy.
+		`{config.prefix}top [stat]` : displays the leaderboard for the specified stat, Exp by default.
+		""", inline = False)
+		embed.add_field(name="Info commands : ", value = f"""
+		`{config.prefix}users` : displays a cool graph showing the number of users over time.
+		`{config.prefix}info` : displays infos and stats about the bot.
+		`{config.prefix}contribute` : want to contribute ? Issue the command and fill the form
+		""", inline = False)
+		embed.add_field(name="MISC. commands : ", value = f"""
+		`{config.prefix}epic [current|next]` : displays the free games on the epic game store
+		""", inline = False)
+		
+		await ctx.send(embed=embed)
 	
-	@commands.command(name="users", description="Sends a cool graph showing the number of users")
+	@commands.command(name="users",aliases=['stonks', 'graph', 'grow'], description="Sends a cool graph showing the number of users")
 	async def users(self, ctx):
 		usercount = []
 		time = []
