@@ -152,7 +152,7 @@ class DatabaseCog(commands.Cog):
 			await ctx.send(f"Stat `{stat}` not found ! Please check your spelling.")
 			return
 		
-		embed = discord.Embed(title=f"LEADERBOARD FOR STAT {stat}", description=f"Use `{config.prefix}top [stat] to show the leaderboard for a precise stat.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+		embed = discord.Embed(title=f"LEADERBOARD FOR STAT {stat}", description=f"Use `{config.prefix}top [stat]` to show the leaderboard for a precise stat.", colour=config.colour, timestamp=datetime.datetime.utcnow())
 		embed.set_thumbnail(url="https://media.discordapp.net/attachments/799748441172738048/804047014492635196/trophy.png")
 		embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
 		

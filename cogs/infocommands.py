@@ -77,9 +77,19 @@ class InfoCog(commands.Cog):
 			for row in csv_reader:
 				usercount.append(int(row[1]))
 				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
-				
+		
+		
 		await ctx.send(len(usercount))
-		await ctx.send(len(time))
+		
+		try :
+			step_size = len(usercount) // 500 # or any other value up to 1000, so it is in your specified limit
+			usercount = usercount[::step_size]
+			time = time[::step_size]
+		except : 
+			pass
+			
+		await ctx.send(len(usercount))
+		
 		
 		plt.figure(figsize=(18,9))
 		plt.xlabel('UTC time')
