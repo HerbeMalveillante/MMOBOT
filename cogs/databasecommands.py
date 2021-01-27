@@ -156,7 +156,7 @@ class DatabaseCog(commands.Cog):
 		embed.set_thumbnail(url="https://media.discordapp.net/attachments/799748441172738048/804047014492635196/trophy.png")
 		embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
 		
-		topString = '\n'.join([f"{i+1} - {self.bot.get_user(top[i][0])} : `{top[i][1]} {stat}`" for i in range(len(top))])
+		topString = '\n'.join([f"#{i+1} - __{self.bot.get_user(top[i][0])}__ : `{top[i][1]} {stat}`" for i in range(len(top))])
 		
 		
 		embed.add_field(name=f"top {len(top)} users in this category :", value = topString, inline = False)
