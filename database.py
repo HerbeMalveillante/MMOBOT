@@ -33,6 +33,10 @@ def get_profile(user_id):
 		log(f"[DATABASE] can't get userdata from {user_id} : account not found")
 		return ["We could not retrieve any informations about the user or the stat you're searching for.\nPlease check your command or create a profile to get started."]
 
+def get_top(stat, limit):
+	curseur.execute(f"SELECT Id, {stat} from userdata ORDER BY {stat} DESC LIMIT {limit}")
+	return curseur.fetchall()
+
 def _get_whole_database():
 	curseur.execute("SELECT * from userdata")
 	return curseur.fetchall()

@@ -143,6 +143,26 @@ class DatabaseCog(commands.Cog):
 		else : 
 			print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
 			traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+	
+	@commands.command(name="top", aliases=['leaderboard'], description = "Gives the leaderboard of the bot based on the specified stat")
+	async def top(self, ctx, stat="Exp"):
+		try :
+			top = database.get_top(stat,10)
+		except : 
+			await ctx.send(f"Stat `{stat}` not found ! Please check your spelling.")
+			return
+		
+		embed = discord.Embed(title=f"LEADERBOARD FOR STAT {stat}", description=f"Use `{config.prefix}top [stat] to show the leaderboard for a precise stat.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+		embed.set_thumbnail(url="https://media.discordapp.net/attachments/799748441172738048/804047014492635196/trophy.png")
+		embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
+		
+		topString = '\n'.join([f"{i+1} - {self.bot.get_user(top[i][0])} : `{top[i][1]} {stat}`" for i in range(len(top))])
+		
+		
+		embed.add_field(name=f"top {len(top)} users in this category :", value = topString, inline = False)
+		
+		
+		await ctx.send(embed=embed)
 
 
 
