@@ -78,8 +78,7 @@ class InfoCog(commands.Cog):
 				usercount.append(int(row[1]))
 				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
 		
-		
-		await ctx.send(len(usercount))
+		oldsamples = len(usercount)
 		
 		try :
 			step_size = len(usercount) // 500 # or any other value up to 1000, so it is in your specified limit
@@ -88,14 +87,13 @@ class InfoCog(commands.Cog):
 		except : 
 			pass
 			
-		await ctx.send(len(usercount))
 		
 		
 		plt.figure(figsize=(18,9))
 		plt.xlabel('UTC time')
 		plt.xticks(rotation=20)
 		plt.ylabel('users')
-		plt.title('Data updated every 10m')
+		plt.title(f'Data updated every 10m. Dynamic data sampling : {len(usercount)}/{oldsamples} values')
 		plt.suptitle('MMOBOT users over time')
 		plt.grid(b=True)
 		#plt.title("i'm gay")
