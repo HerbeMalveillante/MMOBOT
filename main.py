@@ -12,6 +12,7 @@ import traceback
 import csv
 import time
 import os
+import itertools
 
 intents = discord.Intents.default()
 intents.members = True
@@ -29,8 +30,16 @@ extensions = ['cogs.profilecommands', 'cogs.databasecommands', 'cogs.infocommand
 
 config = Config()
 
+
+async def get_pre(bot, message):
+	prefixes = []
+	prefixes.append(config.prefix)
+	prefixes+=map("".join, itertools.product(*zip(config.prefix.upper(), config.prefix.lower())))
+	print(prefixes)
+	return commands.when_mentioned_or(*prefixes)(bot, message)
+
 # Creating the bot object and removing the default help command
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(config.prefix), description=config.description, intents=intents)
+bot = commands.Bot(command_prefix=get_pre, description=config.description, intents=intents)
 bot.remove_command('help')
 
 # loading the cogs extensions
