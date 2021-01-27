@@ -35,7 +35,6 @@ async def get_pre(bot, message):
 	prefixes = []
 	prefixes.append(config.prefix)
 	prefixes+=map("".join, itertools.product(*zip(config.prefix.upper(), config.prefix.lower())))
-	print(prefixes)
 	return commands.when_mentioned_or(*prefixes)(bot, message)
 
 # Creating the bot object and removing the default help command
