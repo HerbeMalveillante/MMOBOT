@@ -45,7 +45,7 @@ class EmojiList(object):
 		"Oil" : "<:oil_bottle:796675410397757460>",
 		"Obsidian" : "<:obsidian:796676716802080808>:",
 		"Seeds":":seedling:",
-		"Antimatter" : "<:antimatter:796678615202529300>"
+		"Antimatter" : "<:antimatter:796678615202529300>",
 		"Points" : ":medal:"
 		
 		}
