@@ -10,7 +10,7 @@ def create_table():
 	(id integer, Exp integer, Gold integer, Energy integer, Diamonds integer,
 	 Weapon integer, Armor integer, Backpack integer, 
 	 Attack integer, Defense integer, Stamina integer,
-	 Wood integer, Fabric integer, Iron integer, Rock integer, Orb integer, Emerald integer, Oil integer, Obsidian integer, Seeds int, Antimatter int)""")
+	 Wood integer, Fabric integer, Iron integer, Rock integer, Orb integer, Emerald integer, Oil integer, Obsidian integer, Seeds integer, Antimatter integer, Points integer)""")
 	connexion.commit()
 
 def get_userdata(user_id, stat):
@@ -73,7 +73,7 @@ def delete_user_account(user_id, printOutput = True):
 
 def create_account(user_id, printOutput=True):
 	if not does_account_exists(user_id):
-		curseur.execute("INSERT INTO userdata VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (user_id, 0, 0, 10, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+		curseur.execute("INSERT INTO userdata VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (user_id, 0, 0, 10, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
 		connexion.commit()
 		if printOutput :
 			log(f"[DATABASE] Created account for user {user_id}")

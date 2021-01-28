@@ -163,6 +163,20 @@ class DatabaseCog(commands.Cog):
 		
 		
 		await ctx.send(embed=embed)
+	
+	@commands.command(name="upgrade", aliases=['craft'], description=f"Upgrade a stat of your choice")
+	async def upgrade(self, ctx, stat=None):
+		upgradables = ['WEAPON', 'ARMOR', 'BACKPACK', 'ATTACK', 'DEFENSE', 'STAMINA']
+		
+		if stat == None : 
+			await ctx.send(f"You must specify a stat to upgrade ! Usage : `{config.prefix}upgrade [stat]`.")
+			return
+		elif stat.upper() not in upgradables : 
+			await ctx.send(f"Upgradable stat `{stat}` not found ! Please check your spelling.")
+			return
+		
+		await ctx.send("WIP")
+			
 
 
 

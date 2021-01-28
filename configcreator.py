@@ -46,5 +46,6 @@ class EmojiList(object):
 		"Obsidian" : "<:obsidian:796676716802080808>:",
 		"Seeds":":seedling:",
 		"Antimatter" : "<:antimatter:796678615202529300>"
+		"Points" : ":medal:"
 		
 		}
