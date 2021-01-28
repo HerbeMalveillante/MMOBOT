@@ -39,6 +39,7 @@ class DatabaseCog(commands.Cog):
 			<:coins:789965630434181120> Gold : `{stats[2]}`
 			:zap: Energy : `{stats[3]}`/`{stats[10]*10}`
 			<:diamond:796663370002071582> Diamonds : `{stats[4]}`
+			:medal: Competence Points : `{stats[21]}`
 			"""
 			embed.add_field(name="Stats", value = statstring, inline = True)
 			equipmentstring = f"""

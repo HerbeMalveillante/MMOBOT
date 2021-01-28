@@ -92,7 +92,7 @@ async def check_for_level(member, ctx, amount):
 	if formulas.levelFromXp(currentXP) > formulas.levelFromXp(currentXP-amount):
 		levelAmount = formulas.levelFromXp(currentXP) - formulas.levelFromXp(currentXP-amount)
 	
-		await ctx.send(f"<:arrow:801026149785796638> :star: You just gained {'a' if levelAmount < 2 else levelAmount} level{'s' if levelAmount > 1 else ''} ! Congratulations ! In a soon update, you will earn competence points that will allow you to upgrade your Attack, Defense and Stamina !")
-
+		await ctx.send(f"<:arrow:801026149785796638> :star: You just gained {'a' if levelAmount < 2 else levelAmount} level{'s' if levelAmount > 1 else ''} ! Congratulations !\nYou earned {'a' if levelAmount < 2 else levelAmount} Competence Point{'s' if levelAmount > 1 else ''} :medal: that you can use to upgrade your Attack, Defense and Stamina with the `{config.prefix}upgrade command` !")
+		database.increase_userdata(ctx.author.id, "Points", levelAmount)
 def setup(bot):
 	bot.add_cog(StepCog(bot))
