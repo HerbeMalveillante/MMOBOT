@@ -26,6 +26,28 @@ def automaticLoot(xp, item):
 		return 1
 	else : 
 		return random.randint(1,20)
+		
+def pointsPrice(level):
+	return level*4
+	
+def coutUpgradeSkills(level):
+
+	points = level*4
+	gold = level*2000
+	
+	orb = level*100
+	oil = level*100
+	seeds = level*100
+	fabric = level*100
+	
+	return {
+	"Points":points,
+	"Gold":gold,
+	"Orb":orb,
+	"Oil":oil,
+	"Seeds":seeds,
+	"Fabric":fabric
+	}
 
 
 

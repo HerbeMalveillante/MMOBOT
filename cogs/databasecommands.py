@@ -5,7 +5,7 @@ from discord.ext import commands, tasks
 import asyncio
 from log import log
 import database
-from configcreator import Config
+from configcreator import Config, EmojiList
 import datetime
 import time
 import sys
@@ -14,6 +14,7 @@ import formulas
 from cogs import step
 
 config = Config()
+emojiList = EmojiList()
 
 class DatabaseCog(commands.Cog):
 	def __init__(self,bot):
@@ -184,8 +185,22 @@ class DatabaseCog(commands.Cog):
 			await ctx.send(f"Upgradable stat `{stat}` not found ! Please check your spelling.")
 			return
 		
-		await ctx.send("WIP")
-			
+		currentLevel = database.get_userdata(ctx.author.id, stat)[0]
+		
+		embed = discord.Embed(title=f"UPGRADE SKILL {stat.upper()} {emojiList.emojis[stat.title()]} | {currentLevel} :arrow_forward: {currentLevel+1}", description=f"Click on a reaction within `{config.timeout}` seconds to confirm or decline the upgrade.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+		embed.set_thumbnail(url=ctx.author.avatar_url)
+		
+		price = formulas.coutUpgradeSkills(currentLevel+1)
+		
+		priceStr = "\n".join(f"{emojiList.emojis[stat]} {stat} : `{price[stat]}`" for stat in price.keys())
+		
+		
+		embed.add_field(name="Price :", value = priceStr, inline = False)
+		
+		embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
+		
+		message = await ctx.send(embed=embed)
+		
 
 
 
