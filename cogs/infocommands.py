@@ -107,8 +107,6 @@ class InfoCog(commands.Cog):
 			time = time[::step_size]
 		except : 
 			pass
-			
-		
 		
 		plt.figure(figsize=(18,9))
 		plt.xlabel('UTC time')
@@ -126,7 +124,48 @@ class InfoCog(commands.Cog):
 		
 		await ctx.send("<:stonks:800794117389942814>",file=discord.File(buf, "usercount.png"))
 		
-		log(f"{ctx.author} asked for the user infos")
+		log(f"{ctx.author} asked for the server infos")
+		
+	@commands.command(name="servers",aliases=['stonksserver', 'graphserver', 'growserver'], description="Sends a cool graph showing the number of servers")
+	async def users(self, ctx):
+		servercount = []
+		time = []
+
+		with open('stats.csv') as csv_file:
+			csv_reader = csv.reader(csv_file, delimiter=',')
+	
+			for row in csv_reader:
+				servercount.append(int(row[2]))
+				time.append(datetime.datetime.utcfromtimestamp(int(row[0])))
+		
+		oldsamples = len(servercount)
+		
+		try :
+			step_size = len(servercount) // 500 # or any other value up to 1000, so it is in your specified limit
+			servercount = servercount[::step_size]
+			time = time[::step_size]
+		except : 
+			pass
+			
+		
+		
+		plt.figure(figsize=(18,9))
+		plt.xlabel('UTC time')
+		plt.xticks(rotation=20)
+		plt.ylabel('servers')
+		plt.title(f'Data updated every 10m. Dynamic data sampling : {len(servercount)}/{oldsamples} values')
+		plt.suptitle('MMOBOT servers over time')
+		plt.grid(b=True)
+		#plt.title("i'm gay")
+		plt.plot(time, servercount)
+		#plt.show()
+		buf = BytesIO()
+		plt.savefig(buf,format="png")
+		buf.seek(0)
+		
+		await ctx.send("<:stonks:800794117389942814>",file=discord.File(buf, "servercount.png"))
+		
+		log(f"{ctx.author} asked for the server infos")
 	
 	@commands.command(name="contribute", aliases = ['contribution', "newevent", "form", "googleform"], description = "Shows the google form in which you can contribute to the bot.")
 	async def contribute(self, ctx):
