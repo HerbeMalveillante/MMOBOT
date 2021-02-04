@@ -176,7 +176,10 @@ class DatabaseCog(commands.Cog):
 	
 	@commands.command(name="upgrade", aliases=['craft'], description=f"Upgrade a stat of your choice")
 	async def upgrade(self, ctx, stat=None):
-		upgradables = ['WEAPON', 'ARMOR', 'BACKPACK', 'ATTACK', 'DEFENSE', 'STAMINA']
+	
+		await discord_create_account(ctx.author, ctx)
+	
+		upgradables = ['ATTACK', 'DEFENSE', 'STAMINA']
 		
 		if stat == None : 
 			await ctx.send(f"You must specify a stat to upgrade ! Usage : `{config.prefix}upgrade [stat]`.")
@@ -201,6 +204,41 @@ class DatabaseCog(commands.Cog):
 		
 		message = await ctx.send(embed=embed)
 		
+		await message.add_reaction("✅")
+		await message.add_reaction("🚫")
+		
+		def check(r, u):
+			checkBool = u.id == ctx.author.id and (not u.bot) and r.message.id == message.id and (str(r.emoji) == "✅" or str(r.emoji) == "🚫")
+			return checkBool
+		try : 
+			reaction, user = await self.bot.wait_for('reaction_add', check = check, timeout = config.timeout)
+		except asyncio.TimeoutError:
+			log(f"Delay for {ctx.author.id} to upgrade {stat} has expired.")	
+		
+		else : 
+			
+		
+			if str(reaction.emoji) == "🚫":
+				await ctx.send("Upgrade cancelled.")
+				return
+			elif str(reaction.emoji) == "✅":	
+			
+				authorStats = database.get_profile(ctx.author.id)
+				pointsStats = authorStats[21]
+				goldStats = authorStats[2]
+				orbStats = authorStats[15]
+				oilStats = authorStats[17]
+				seedsStats = authorStats[19]
+				fabricStats = authorStats[12]
+				
+				boolRich = pointsStats >= price["Points"] and goldStats >= price["Gold"] and orbStats >= price["Orb"] and oilStats >= price["Oil"] and seedsStats >= price["Seeds"] and fabricStats >= price["Fabric"]
+				
+				if boolRich:
+					await ctx.send("You're rich enough. Please wait one more update and you will be able to upgrade.")
+				else : 
+					await ctx.send("You're not rich enough")
+				return
+			
 
 
 
