@@ -3,7 +3,7 @@
 ![image](https://img.shields.io/github/languages/top/herbemalveillante/mmobot)
 ![image](https://img.shields.io/github/license/herbemalveillante/mmobot)
 ![image](https://img.shields.io/github/last-commit/herbemalveillante/mmobot)
-[<img src="https://img.shields.io/discord/799331612918939688">](http://google.com)
+[<img src="https://img.shields.io/discord/799331612918939688">](https://discord.gg/vRA4gdraaC)
 
 # MMOBOT
 
