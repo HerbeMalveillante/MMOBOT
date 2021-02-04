@@ -14,8 +14,8 @@ def xpFromLevel(level):
 def automaticGold(xp):
 	level = levelFromXp(xp)
 	
-	low = (level/2)
-	high = (level*1.5)
+	low = (level-1/4*level)
+	high = (level+1/4*level)
 	gold = random.randint(int(low) if low >= 1 else 1 , int(high) if high >= 2 else 2)
 	return gold
 	
