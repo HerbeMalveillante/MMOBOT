@@ -50,7 +50,7 @@ class StepCog(commands.Cog):
 				
 				step = random.choice(stepList)
 				print(f"{ctx.author} triggered event {step[0]}.")
-				expReward = random.randint(1,20)
+				expReward = random.randint(15,25)
 				rewards = [('Gold', formulas.automaticGold(playerXp)), ('Exp', expReward)]
 				if step[2] != "None" : 
 					rewards.append((step[2], formulas.automaticLoot(playerXp, step[2])))
