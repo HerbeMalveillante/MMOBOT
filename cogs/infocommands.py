@@ -127,7 +127,7 @@ class InfoCog(commands.Cog):
 		log(f"{ctx.author} asked for the server infos")
 		
 	@commands.command(name="servers",aliases=['stonksserver', 'graphserver', 'growserver'], description="Sends a cool graph showing the number of servers")
-	async def users(self, ctx):
+	async def servers(self, ctx):
 		servercount = []
 		time = []
 
