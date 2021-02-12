@@ -176,34 +176,32 @@ class DatabaseCog(commands.Cog):
 	
 	@commands.command(name="upgrade", aliases=['craft'], description=f"Upgrade a stat of your choice")
 	async def upgrade(self, ctx, stat=None):
-	
 		await discord_create_account(ctx.author, ctx)
-	
 		upgradables = ['ATTACK', 'DEFENSE', 'STAMINA']
-		
 		if stat == None : 
 			await ctx.send(f"You must specify a stat to upgrade ! Usage : `{config.prefix}upgrade [stat]`.")
 			return
 		elif stat.upper() not in upgradables : 
 			await ctx.send(f"Upgradable stat `{stat}` not found ! Please check your spelling.")
 			return
-		
+			
+		authorStats = database.get_profile(ctx.author.id)
+		pointsStats = authorStats[21]
+		goldStats = authorStats[2]
+		orbStats = authorStats[15]
+		oilStats = authorStats[17]
+		seedsStats = authorStats[19]
+		fabricStats = authorStats[12]
+			
+			
 		currentLevel = database.get_userdata(ctx.author.id, stat)[0]
-		
 		embed = discord.Embed(title=f"UPGRADE SKILL {stat.upper()} {emojiList.emojis[stat.title()]} | {currentLevel} :arrow_forward: {currentLevel+1}", description=f"Click on a reaction within `{config.timeout}` seconds to confirm or decline the upgrade.", colour=config.colour, timestamp=datetime.datetime.utcnow())
 		embed.set_thumbnail(url=ctx.author.avatar_url)
-		
 		price = formulas.coutUpgradeSkills(currentLevel+1)
-		
-		priceStr = "\n".join(f"{emojiList.emojis[stat]} {stat} : `{price[stat]}`" for stat in price.keys())
-		
-		
+		priceStr = "\n".join(f"{emojiList.emojis[stat]} {stat} : `{database.get_userdata(ctx.author.id, stat)[0]}`/`{price[stat]}`" for stat in price.keys())
 		embed.add_field(name="Price :", value = priceStr, inline = False)
-		
 		embed.set_footer(text=self.bot.user.name + ' - requested by ' + str(ctx.author), icon_url=ctx.author.avatar_url)
-		
 		message = await ctx.send(embed=embed)
-		
 		await message.add_reaction("✅")
 		await message.add_reaction("🚫")
 		
@@ -214,30 +212,30 @@ class DatabaseCog(commands.Cog):
 			reaction, user = await self.bot.wait_for('reaction_add', check = check, timeout = config.timeout)
 		except asyncio.TimeoutError:
 			log(f"Delay for {ctx.author.id} to upgrade {stat} has expired.")	
-		
 		else : 
-			
-		
 			if str(reaction.emoji) == "🚫":
 				await ctx.send("Upgrade cancelled.")
 				return
 			elif str(reaction.emoji) == "✅":	
-			
-				authorStats = database.get_profile(ctx.author.id)
-				pointsStats = authorStats[21]
-				goldStats = authorStats[2]
-				orbStats = authorStats[15]
-				oilStats = authorStats[17]
-				seedsStats = authorStats[19]
-				fabricStats = authorStats[12]
 				
 				boolRich = pointsStats >= price["Points"] and goldStats >= price["Gold"] and orbStats >= price["Orb"] and oilStats >= price["Oil"] and seedsStats >= price["Seeds"] and fabricStats >= price["Fabric"]
-				
 				if boolRich:
-					await ctx.send("You're rich enough. Please wait one more update and you will be able to upgrade.")
+				
+					database.increase_userdata(ctx.author.id, "Points", -price['Points'])
+					database.increase_userdata(ctx.author.id, "Gold", -price['Gold'])
+					database.increase_userdata(ctx.author.id, "Orb", -price['Orb'])
+					database.increase_userdata(ctx.author.id, "Oil", -price['Oil'])
+					database.increase_userdata(ctx.author.id, "Seeds", -price['Seeds'])
+					database.increase_userdata(ctx.author.id, "Fabric", -price['Fabric'])
+					database.increase_userdata(ctx.author.id, stat.upper(), 1)
+				
+				
+					await ctx.send(f"You successfully upgraded the stat `{stat}` to level `{currentLevel+1}` !")
 				else : 
-					await ctx.send("You're not rich enough")
+					await ctx.send("I'm sorry, but you're not rich enough to upgrade this stat.")
 				return
+				
+				
 			
 
 
