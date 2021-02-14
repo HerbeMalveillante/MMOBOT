@@ -49,6 +49,7 @@ class InfoCog(commands.Cog):
 		[Invite me on your server](https://discord.com/oauth2/authorize?client_id={self.bot.user.id}&scope=bot&permissions=379969)
 		[Official support server](https://discord.gg/vRA4gdraaC)
 		[GitHub repo](https://github.com/HerbeMalveillante/MMOBOT)
+		[Vote for the bot !](https://top.gg/bot/793928798298177537/vote)
 		""", inline = False)
 		await ctx.send(embed=embed)
 		log(f"{ctx.author} asked for infos about the bot.")
@@ -80,6 +81,7 @@ class InfoCog(commands.Cog):
 		`{config.prefix}users` : displays a cool graph showing the number of users over time.
 		`{config.prefix}info` : displays infos and stats about the bot.
 		`{config.prefix}contribute` : want to contribute ? Issue the command and fill the form
+		`{config.prefix}vote:` : sends a link to vote for the bot on top.gg
 		""", inline = False)
 		embed.add_field(name="MISC. commands : ", value = f"""
 		`{config.prefix}epic [current|next]` : displays the free games on the epic game store
