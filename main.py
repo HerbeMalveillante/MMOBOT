@@ -18,7 +18,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
 # We put here the name of all the bot extensions
-extensions = ['cogs.profilecommands', 'cogs.databasecommands', 'cogs.infocommands', 'cogs.step', 'cogs.misc']
+extensions = ['cogs.profilecommands', 'cogs.databasecommands', 'cogs.infocommands', 'cogs.step', 'cogs.misc', 'cogs.topgg']
 
 # Creating the folder path to load folders
 #folderpath = "\\".join(__file__.split("\\")[:-1])+"\\"

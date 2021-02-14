@@ -20,6 +20,7 @@ class Config(object):
 			self.timeout = float(data["timeout"])
 			self.boottime = datetime.datetime.now().timestamp()
 			self.admins = [412425659483160579,417013673442279434]
+			self.dbltoken = data["dbltoken"]
 
 
 class EmojiList(object):
