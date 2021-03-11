@@ -29,7 +29,7 @@ class TopGG(commands.Cog):
 	@commands.command(name="vote", aliases = ["topgg", "top.gg", "votetop"], description = "Check if you voted on top.gg and sends you a reward if you did.")
 	async def vote(self, ctx):
 	
-		header = {
+		headers = {
 			"Authorization":c.dbltoken
 		}
 		params = {
