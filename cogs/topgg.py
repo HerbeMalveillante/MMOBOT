@@ -2,6 +2,7 @@ import dbl
 import discord
 from discord.ext import commands
 from configcreator import Config
+import requests
 
 c = Config()
 
@@ -27,8 +28,18 @@ class TopGG(commands.Cog):
 	
 	@commands.command(name="vote", aliases = ["topgg", "top.gg", "votetop"], description = "Check if you voted on top.gg and sends you a reward if you did.")
 	async def vote(self, ctx):
+	
+		header = {
+			"Authorization":c.dbltoken
+		}
+		params = {
+			"userId":ctx.author.id
+		}
+		resp = requests.get("https://top.gg/api//bots/793928798298177537/check", headers=headers, params=params)
+	
+		
 		await ctx.send(f"You can vote for the bot on top.gg by following this link : https://top.gg/bot/793928798298177537/vote . Thanks a lot for your support !")
-
+		await ctx.send(resp)
 
 
 
