@@ -84,8 +84,8 @@ class DatabaseCog(commands.Cog):
 	async def setstat(self, ctx, member : discord.Member=None, stat = None, value = None):
 		if ctx.author.id in config.admins:
 			try:
-				database.modify_userdata(member.id, stat, int(value))
-				await ctx.send(f"Changed stat {stat} for user {member} to value {value}")
+				database.modify_userdata(member.id, stat, int(value), False)
+				#await ctx.send(f"Changed stat {stat} for user {member} to value {value}")
 				if stat == "Exp":
 					await step.check_for_level(member, ctx, int(value))
 				
@@ -107,10 +107,10 @@ class DatabaseCog(commands.Cog):
 	async def addstat(self, ctx, member: discord.Member=None, stat = None, value = None):
 		if ctx.author.id in config.admins : 
 			try : 
-				database.increase_userdata(member.id, stat, int(value))
+				database.increase_userdata(member.id, stat, int(value), False)
 				await ctx.send(f"Increased stat {stat} for user {member} by {value}")
 				if stat == "Exp":
-					await step.check_for_level(member, ctx, int(value))
+					await step.check_for_level(member, ctx, int(value), False)
 				
 			except : 
 				await ctx.send(f"Oops : Something went wrong. Please check your syntax : {config.prefix}addstat [member] [stat] [value]")
@@ -221,13 +221,13 @@ class DatabaseCog(commands.Cog):
 				boolRich = pointsStats >= price["Points"] and goldStats >= price["Gold"] and orbStats >= price["Orb"] and oilStats >= price["Oil"] and seedsStats >= price["Seeds"] and fabricStats >= price["Fabric"]
 				if boolRich:
 				
-					database.increase_userdata(ctx.author.id, "Points", -price['Points'])
-					database.increase_userdata(ctx.author.id, "Gold", -price['Gold'])
-					database.increase_userdata(ctx.author.id, "Orb", -price['Orb'])
-					database.increase_userdata(ctx.author.id, "Oil", -price['Oil'])
-					database.increase_userdata(ctx.author.id, "Seeds", -price['Seeds'])
-					database.increase_userdata(ctx.author.id, "Fabric", -price['Fabric'])
-					database.increase_userdata(ctx.author.id, stat.upper(), 1)
+					database.increase_userdata(ctx.author.id, "Points", -price['Points'], False)
+					database.increase_userdata(ctx.author.id, "Gold", -price['Gold'], False)
+					database.increase_userdata(ctx.author.id, "Orb", -price['Orb'], False)
+					database.increase_userdata(ctx.author.id, "Oil", -price['Oil'], False)
+					database.increase_userdata(ctx.author.id, "Seeds", -price['Seeds'], False)
+					database.increase_userdata(ctx.author.id, "Fabric", -price['Fabric'], False)
+					database.increase_userdata(ctx.author.id, stat.upper(), 1, False)
 				
 				
 					await ctx.send(f"You successfully upgraded the stat `{stat}` to level `{currentLevel+1}` !")

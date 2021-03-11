@@ -34,7 +34,7 @@ class StepCog(commands.Cog):
 		self.bot = bot
 		
 
-	@commands.cooldown(1, 3, BucketType.member) 
+	#@commands.cooldown(1, 3, BucketType.member) 
 	@commands.command(name="step", aliases = ["s","pas", "footstep", "play"], description = "The main command of the game : use one energy point to explore the wide world of MMOBOT !")
 	async def step(self,ctx):
 	
@@ -46,7 +46,7 @@ class StepCog(commands.Cog):
 			
 			if playerEnergy > 0 :
 			
-				database.increase_userdata(ctx.author.id, "Energy", -1)
+				database.increase_userdata(ctx.author.id, "Energy", -1, False)
 				
 				step = random.choice(stepList)
 				print(f"{ctx.author} triggered event {step[0]}.")
@@ -67,7 +67,7 @@ class StepCog(commands.Cog):
 					log(str(rewards))
 					
 				for reward in rewards : 
-					database.increase_userdata(ctx.author.id, reward[0], reward[1])
+					database.increase_userdata(ctx.author.id, reward[0], reward[1], False)
 
 				embed.add_field(name="Rewards", value = strRewards, inline = False)
 				await ctx.send(embed=embed)
@@ -93,7 +93,8 @@ async def check_for_level(member, ctx, amount):
 		levelAmount = formulas.levelFromXp(currentXP) - formulas.levelFromXp(currentXP-amount)
 	
 		await ctx.send(f"<:arrow:801026149785796638> :star: You just gained {'a' if levelAmount < 2 else levelAmount} level{'s' if levelAmount > 1 else ''} ! Congratulations !\nYou earned {'a' if levelAmount < 2 else levelAmount} Competence Point{'s' if levelAmount > 1 else ''} :medal: that you can use to upgrade your Attack, Defense and Stamina with the `{config.prefix}upgrade` command !")
-		database.increase_userdata(ctx.author.id, "Points", levelAmount)
+		database.increase_userdata(ctx.author.id, "Points", levelAmount, False)
+		print(f"{ctx.author} gained a level.")
 def setup(bot):
 	bot.add_cog(StepCog(bot))
 	
