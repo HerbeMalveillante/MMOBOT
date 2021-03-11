@@ -16,9 +16,24 @@ class TopGG(commands.Cog):
 		
 	async def on_guild_post():
 		print("Server count uploaded to top.gg")
+	
+	
+	@commands.Cog.listener()
+	async def on_dbl_vote(self, data):
+		guild = bot.get_guild(799331612918939688)
+		channel = guild.get_channel(819623436741378088)
+		
+		await channel.send(f"Received an upvote:\n{data}")
+	
+	@commands.command(name="vote", aliases = ["topgg", "top.gg", "votetop"], description = "Check if you voted on top.gg and sends you a reward if you did.")
+	async def vote(self, ctx):
+		await ctx.send(f"You can vote for the bot on top.gg by following this link : https://top.gg/bot/793928798298177537/vote . Thanks a lot for your support !")
 
 
 
+
+	
+	
 def setup(bot):
 	if c.prefix == "mmo " : # temporaire mais on upload que si le bot est bien le main
 		bot.add_cog(TopGG(bot))

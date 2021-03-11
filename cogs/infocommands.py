@@ -173,9 +173,6 @@ class InfoCog(commands.Cog):
 	async def contribute(self, ctx):
 		await ctx.send(f"You can contribute to the bot very easily ! If you want to add a new random event, monsters, items, commands or gameplay mechanics to MMOBOT, just follow this link and fill the form : https://forms.gle/bKdt8XUdEqmF6Bru5")	
 	
-	@commands.command(name="vote", aliases = ["topgg", "top.gg", "votetop"], description = "Sends the link to vote for the bot on top.gg")
-	async def vote(self, ctx):
-		await ctx.send(f"You can vote for the bot on top.gg by following this link : https://top.gg/bot/793928798298177537/vote . Thanks a lot for your support !")
 
 
 def setup(bot):
