@@ -1,5 +1,3 @@
-# this is completely useless for now.
-
 import discord
 from discord.ext import commands
 from configcreator import Config
@@ -7,6 +5,7 @@ import asyncio
 from log import log
 from epicstore_api import EpicGamesStoreAPI
 import datetime
+import re
 
 config = Config()
 
@@ -93,30 +92,62 @@ class MiscCommandsCog(commands.Cog):
 		self.bot = bot
 	
 	@commands.command(name="epic", aliases = ["epicgames"], description = "Displays the currently free games available on the EPIC GAME STORE")
-	async def epic(self, ctx, arg="current"):
+	async def epic(self, ctx, arg="list"):
 		games = getGames()
 		
-		if arg == "current":
-			game = games[0]
-		elif arg == "next":
-			game = games[1]
-		else : 
-			await ctx.send(f"Invalid argument. Usage : `{config.prefix}epic [current|next]`")
+		
+		#await ctx.send(games)
+		
+		if arg == "list":
+			
+			indexListString = "|".join([str(i) for i in range(len(games))])
+			embed = discord.Embed(title=f"FREE GAMES ON THE EPIC GAME STORE", description = f"Use the command `{config.prefix}epic <{indexListString}>` to see the corresponding game.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+			embed.set_thumbnail(url="https://cdn2.unrealengine.com/Unreal+Engine%2Feg-logo-filled-1255x1272-0eb9d144a0f981d1cbaaa1eb957de7a3207b31bb.png")
+			embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
+			
+			embed.add_field(name="Game index :", value="\n".join([f"`{i} | {games[i]['name']}`" for i in range(len(games))]))
+			
+			await ctx.send(embed=embed)
 			return
+		else :
 		
-		embed = discord.Embed(title=f"FREE GAMES ON THE EPIC GAME STORE", description = f"Use the argument `{config.prefix}epic {'next` to get the game of next week.' if arg == 'current' else 'current` to get currently free game.'}", colour=config.colour, timestamp=datetime.datetime.utcnow())
-		embed.set_thumbnail(url=game['imageWide'])
-		embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
-		embed.add_field(name="Game name :", value = game['name'])
-		embed.add_field(name="Game seller : ", value=game['seller'], inline = False)
-		value = "Currently Free" if game["currentlyFree"] == True else "Soon to be free"
-		embed.add_field(name="Game state :", value = f"{value} (previously {game['originalPrice']})", inline = False)
-		embed.add_field(name="Link to the game page :", value = f"[Click me]({game['gameLink']})", inline = False)
-		embed.add_field(name="Promotion dates :", value=f"{game['startDate'][:10]} to {game['endDate'][:10]}", inline = False)
-		embed.add_field(name="Images :", value = f"[Wide image]({game['imageWide']})\n[Tall image]({game['imageTall']})", inline=False)
+			try :
+				arg = int(arg) # si l'entrée peut être un chiffre
+			except :
+				await ctx.send(f"Invalid argument. Usage : `{config.prefix}epic [list|<1...9>]`")
+				return
+			
+			if arg not in [i for i in range(len(games))] :
+				await ctx.send(f"Game number {arg} not found. Check `{config.prefix}epic list` to check the available games.")
+				return
+
 		
 		
-		await ctx.send(embed=embed)
+			game = games[arg]
+		
+			validurl = re.compile(r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$")
+			
+
+
+			embed = discord.Embed(title=f"FREE GAMES ON THE EPIC GAME STORE", description = f"Use the command `{config.prefix}epic list` to see all the available games.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+			if validurl.match(game['imageWide']) is not None :
+				embed.set_thumbnail(url=game['imageWide'])
+			else :
+				embed.set_thumbnail(url='https://worldofvoz.files.wordpress.com/2020/01/http-error-404-not-found.png')
+			embed.set_footer(text=self.bot.user.name + ' - requested by ' +str(ctx.author), icon_url=ctx.author.avatar_url)
+			embed.add_field(name="Game name :", value = game['name'])
+			embed.add_field(name="Game seller : ", value=game['seller'], inline = False)
+			value = "Currently Free" if game["currentlyFree"] == True else "Soon to be free"
+			embed.add_field(name="Game state :", value = f"{value} (previously {game['originalPrice']})", inline = False)
+			embed.add_field(name="Link to the game page :", value = f"[Click me]({game['gameLink']})", inline = False)
+			embed.add_field(name="Promotion dates :", value=f"{game['startDate'][:10]} to {game['endDate'][:10]}", inline = False)
+			if validurl.match(game['imageWide']) is not None :
+				embed.add_field(name="Images :", value = f"[Wide image]({game['imageWide']})\n[Tall image]({game['imageTall']})", inline=False)
+
+			
+			await ctx.send(embed=embed)
+			
+			
 		log(f"{ctx.author} asked about the free games")
 
 def setup(bot):

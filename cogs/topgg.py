@@ -18,6 +18,7 @@ class TopGG(commands.Cog):
 		print("Server count uploaded to top.gg")
 
 
-if c.prefix == "mmo " : # temporaire mais on upload que si le bot est bien le main
-	def setup(bot):
+
+def setup(bot):
+	if c.prefix == "mmo " : # temporaire mais on upload que si le bot est bien le main
 		bot.add_cog(TopGG(bot))

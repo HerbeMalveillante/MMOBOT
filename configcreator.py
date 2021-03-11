@@ -6,7 +6,6 @@ import datetime
 # Version number. Changed manually.
 version = "0.1"
 
-
 class Config(object):
 #Loading the config options from the config file and creating a class
 	def __init__(self):

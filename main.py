@@ -27,7 +27,6 @@ extensions = ['cogs.profilecommands', 'cogs.databasecommands', 'cogs.infocommand
 #if folderpath =="/":
 #	folderpath =""
 
-
 config = Config()
 
 

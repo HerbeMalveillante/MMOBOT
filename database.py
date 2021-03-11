@@ -4,7 +4,6 @@ import sqlite3
 import json
 from log import log
 
-
 def create_table():
 	curseur.execute("""CREATE TABLE IF NOT EXISTS userdata
 	(id integer, Exp integer, Gold integer, Energy integer, Diamonds integer,
