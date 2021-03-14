@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from configcreator import Config
 import requests
+import json
 
 c = Config()
 
@@ -19,13 +20,6 @@ class TopGG(commands.Cog):
 		print("Server count uploaded to top.gg")
 	
 	
-	@commands.Cog.listener()
-	async def on_dbl_vote(self, data):
-		guild = bot.get_guild(799331612918939688)
-		channel = guild.get_channel(819623436741378088)
-		
-		await channel.send(f"Received an upvote:\n{data}")
-	
 	@commands.command(name="vote", aliases = ["topgg", "top.gg", "votetop"], description = "Check if you voted on top.gg and sends you a reward if you did.")
 	async def vote(self, ctx):
 	
@@ -35,11 +29,11 @@ class TopGG(commands.Cog):
 		params = {
 			"userId":ctx.author.id
 		}
-		resp = requests.get("https://top.gg/api//bots/793928798298177537/check", headers=headers, params=params)
+		resp = json.loads(requests.get("https://top.gg/api//bots/793928798298177537/check", headers=headers, params=params).text)
 	
 		
 		await ctx.send(f"You can vote for the bot on top.gg by following this link : https://top.gg/bot/793928798298177537/vote . Thanks a lot for your support !")
-		await ctx.send(resp)
+		await ctx.send("You already voted for the bot, thanks !" if resp["voted"] == 1 else "You did not vote for the bot :(")
 
 
 
