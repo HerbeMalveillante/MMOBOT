@@ -15,6 +15,10 @@ import os
 import itertools
 
 
+
+
+
+
 intents = discord.Intents.default()
 intents.members = True
 intents.presences = True
