@@ -2,5 +2,7 @@
 
 import datetime
 
-def log(content):  # modified print() function that adds the hour to the print. More convenient for logging purposes.
+
+# modified print() function that adds the hour to the print. More convenient for logging purposes.
+def log(content):
     print(str(datetime.datetime.utcnow())[11:19] + " : " + content)

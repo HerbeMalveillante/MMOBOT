@@ -1,9 +1,6 @@
 import discord
 from discord.ext import commands, tasks
-import asyncio
-import json
 import datetime
-import uuid
 import database
 from log import log
 from configcreator import Config
@@ -11,12 +8,7 @@ import sys
 import traceback
 import csv
 import time
-import os
 import itertools
-
-
-
-
 
 
 intents = discord.Intents.default()
@@ -117,7 +109,7 @@ async def ping(ctx):
 @bot.command(name="say", aliases=['tell', 'repeat'], description='[ADMIN] Make the bot say something')
 async def say(ctx, *content):
     if ctx.author.id in config.admins:
-        message = await ctx.send(' '.join(content))
+        await ctx.send(' '.join(content))
         await ctx.message.delete()
         log(f"{ctx.author} made the bot say '{' '.join(content)}'")
     else:
