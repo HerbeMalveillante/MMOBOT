@@ -86,6 +86,75 @@ class StepCog(commands.Cog):
         else:
             log(error)
 
+    @commands.command(name="autostep", aliases=["autopas", "mercenaire"], description="An automatic version of the step command, but you don't get all the rewards !")
+    async def autostep(self, ctx, energy: int = None):
+        if await databasecommands.discord_create_account(ctx.author, ctx):
+            if energy is None:
+                energy = int(database.get_userdata(ctx.author.id, "Energy")[0])
+
+            if energy <= 0:
+                await ctx.send("I'm sorry, you can't take a step with 0 energy or less.")
+                return
+            elif energy > int(database.get_userdata(ctx.author.id, "Energy")[0]):
+                await ctx.send(f"I'm sorry, you don't have enough energy to perform {energy} automatic steps.")
+                return
+
+            playerXp = database.get_userdata(ctx.author.id, "Exp")[0]
+
+            expReward = random.randint(15, 25) * energy
+            goldReward = formulas.automaticGold(playerXp) * energy
+
+            rewards = {
+                "Gold": goldReward,
+                "Exp": expReward
+            }
+
+            for i in range(energy):
+                step = random.choice(stepList)
+
+                if step[2] != "None":
+                    if step[2] not in list(rewards.keys()):
+                        rewards[step[2]] = formulas.automaticLoot(
+                            playerXp, step[2])
+                    else:
+                        rewards[step[2]
+                                ] += formulas.automaticLoot(playerXp, step[2])
+
+            embed = discord.Embed(title=f"The mercenary has arrived !",
+                                  description=f"Use command `{config.prefix}autostep <energy>` to autostep for a certain amount of energy.", colour=config.colour, timestamp=datetime.datetime.utcnow())
+            embed.set_thumbnail(url=self.bot.user.avatar_url)
+            embed.set_footer(text=self.bot.user.name + ' - requested by ' +
+                             str(ctx.author), icon_url=ctx.author.avatar_url)
+
+            embed.add_field(name="Event label",
+                            value=f"You've hired a mercenary to take a **{energy}**-step journey for you. In exchange, it requires 30% of the resources recovered. You reluctantly agree.", inline=False)
+            try:
+                strRewards = "\n".join(
+                    [f"{emojis[r]} {r} : `{int(round(rewards[r] * 0.7))}`" for r in list(rewards.keys())])
+                embed.add_field(name="Rewards", value=strRewards, inline=False)
+            except:
+                log("IMPORTANT : STEP ERROR HAS OCCURED : BAD FORMATTING.")
+                log(str(rewards))
+                await ctx.send("A bad syntax error has occured in one of the events. You did not lost any energy. Please report this error to a developer.")
+                return
+
+            database.increase_userdata(ctx.author.id, "Energy", -energy, False)
+
+            for r in list(rewards.keys()):
+                database.increase_userdata(
+                    ctx.author.id, r, int(round(rewards[r] * 0.7)), False)
+
+            await ctx.send(embed=embed)
+            await check_for_level(ctx.author, ctx, rewards["Exp"])
+            log(f"{ctx.author} autostepped for {energy} energy.")
+
+    @autostep.error
+    async def autostep_error(self, ctx, error):
+        if isinstance(error, commands.BadArgument):
+            await ctx.send(f"Usage : `{config.prefix}autostep <energy amount>`")
+        else:
+            log(error)
+
 
 async def check_for_level(member, ctx, amount):
     """This should be checked AFTER adding the <amount> amount of xp to the player"""

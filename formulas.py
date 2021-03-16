@@ -26,6 +26,8 @@ def automaticLoot(xp, item):
 
     if item == 'Antimatter':
         return 1
+    elif item == "Diamonds":
+        return random.randint(1, 3)
     else:
         return random.randint(1, 20)
 
